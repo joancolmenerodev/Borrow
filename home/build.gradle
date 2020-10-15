@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation TestLibraryDependencies.testRunner
 
     implementation project(ModuleDependencies.FIREBASE)
-    implementation project(ModuleDependencies.LIBRARY_BASE)
+    implementation project(ModuleDependencies.SHARED)
     implementation project(ModuleDependencies.COMMONS_UI)
 
 }

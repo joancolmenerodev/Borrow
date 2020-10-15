@@ -19,7 +19,6 @@ import com.borrow.login.feature.signin.data.FirebaseUser
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
@@ -85,24 +84,10 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
 
     private fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential) {
         signInViewModel.signInWithGoogle(googleAuthCredential)
-        signInViewModel.authenticatedUserLiveData?.observe(this) { authenticatedUser ->
-            if (authenticatedUser.isNew) {
-                createNewUser(authenticatedUser)
-            } else {
-                toastMessage("User created $authenticatedUser")
-                requireContext().startActivity(Intent(requireContext(), HomeActivity::class.java))
-                activity?.finish()
-            }
-        }
-    }
-
-    private fun createNewUser(authenticatedUser: FirebaseUser) {
-        signInViewModel.createUser(authenticatedUser)
-        signInViewModel.createdUserLiveData?.observe(this) { user ->
-            if (user.isCreated) {
-                toastMessage(user.name)
-            }
-            toastMessage("Go to authenticated Activity")
+        signInViewModel.authenticatedUser?.observe(this) { authenticatedUser ->
+            toastMessage("User created $authenticatedUser")
+            requireContext().startActivity(Intent(requireContext(), HomeActivity::class.java))
+            activity?.finish()
         }
     }
 

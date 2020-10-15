@@ -12,8 +12,7 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(private val signInRepository: SignInRepository) :
     ViewModel() {
 
-    var authenticatedUserLiveData: LiveData<FirebaseUser>? = null
-    var createdUserLiveData: LiveData<FirebaseUser>? = null
+    var authenticatedUser: LiveData<FirebaseUser>? = null
 
     private val _signInViewState =
         MutableLiveData<SignInViewState<FirebaseUser>>()
@@ -21,17 +20,9 @@ class SignInViewModel @Inject constructor(private val signInRepository: SignInRe
         get() = _signInViewState
 
     fun signInWithGoogle(googleAuthCredential: AuthCredential?) {
-        authenticatedUserLiveData = googleAuthCredential?.let {
+        authenticatedUser = googleAuthCredential?.let { authCredential ->
             signInRepository.firebaseSignInWithGoogle(
-                it
-            )
-        }
-    }
-
-    fun createUser(authenticatedUser: FirebaseUser?) {
-        createdUserLiveData = authenticatedUser?.let {
-            signInRepository.createUserInFirestoreIfNotExists(
-                it
+                authCredential
             )
         }
     }

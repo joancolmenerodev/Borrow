@@ -35,9 +35,6 @@ object LibrariesDependencies {
         "com.google.firebase:firebase-auth:${LibraryVersion.FIREBASE_AUTH_VERSION}"
     const val PLAY_SERVICES_AUTH =
         "com.google.android.gms:play-services-auth:${LibraryVersion.PLAY_SERVICES_AUTH_VERSION}"
-    const val FIRESTORE =
-        "com.google.firebase:firebase-firestore:${LibraryVersion.FIRESTORE_VERSION}"
-
 }
 
 private object LibraryVersion {
@@ -52,5 +49,4 @@ private object LibraryVersion {
     const val LOTTIE_VERSION = "3.0.0"
     const val FIREBASE_AUTH_VERSION = "19.4.0"
     const val PLAY_SERVICES_AUTH_VERSION = "18.1.0"
-    const val FIRESTORE_VERSION = "21.1.1"
 }

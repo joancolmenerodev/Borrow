@@ -5,7 +5,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -16,10 +15,6 @@ object FirebaseModule {
     @Provides
     @Reusable
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
-
-    @Provides
-    @Reusable
-    fun provideRootRef(): FirebaseFirestore = FirebaseFirestore.getInstance()
 
     @Provides
     @Reusable

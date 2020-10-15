@@ -52,6 +52,4 @@ dependencies {
 
     api LibrariesDependencies.FIREBASE_AUTH
     api LibrariesDependencies.PLAY_SERVICES_AUTH
-    api LibrariesDependencies.FIRESTORE
-
 }
