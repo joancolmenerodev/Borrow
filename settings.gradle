@@ -1,7 +1,7 @@
-include ':home'
+include ':features:home'
 include ':commons-ui'
 include ':shared'
-include ':login'
+include ':features:login'
 include ':firebase'
 include ':app'
 rootProject.name = "BorrowApp"
