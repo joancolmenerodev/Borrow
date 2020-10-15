@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/brandPrimary</color>
+    <color name="colorPrimaryDark">@color/brandPrimaryDark</color>
+    <color name="colorAccent">@color/brandAccent</color>
+</resources>

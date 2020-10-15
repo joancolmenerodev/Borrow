@@ -1,0 +1,7 @@
+include ':home'
+include ':commons-ui'
+include ':librarybase'
+include ':login'
+include ':firebase'
+include ':app'
+rootProject.name = "BorrowApp"
