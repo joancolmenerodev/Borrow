@@ -11,11 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.borrow.home.HomeActivity
-import com.borrow.librarybase.extensions.observe
 import com.borrow.librarybase.viewbinding.viewBinding
 import com.borrow.login.R
 import com.borrow.login.databinding.FragmentSigninBinding
-import com.borrow.login.feature.signin.data.FirebaseUser
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -50,10 +48,6 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSignInButton()
-
-        observe(
-            signInViewModel.signInViewState,
-            { viewState -> viewState?.let { displaySignInResult(it) } })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -70,21 +64,9 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
         }
     }
 
-    private fun displaySignInResult(it: SignInViewState<FirebaseUser>) {
-        when (it) {
-            is SignInViewState.Success -> {
-                Toast.makeText(context, "success", Toast.LENGTH_SHORT).show()
-            }
-            is SignInViewState.Error -> {
-                Toast.makeText(context, it.result.message, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
-
     private fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential) {
         signInViewModel.signInWithGoogle(googleAuthCredential)
-        signInViewModel.authenticatedUser?.observe(this) { authenticatedUser ->
+        signInViewModel.authenticatedUser.observe(this) { authenticatedUser ->
             toastMessage("User created $authenticatedUser")
             requireContext().startActivity(Intent(requireContext(), HomeActivity::class.java))
             activity?.finish()

@@ -3,27 +3,28 @@ package com.borrow.login.feature.signin.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.borrow.login.feature.signin.data.FirebaseUser
+import androidx.lifecycle.viewModelScope
 import com.borrow.login.feature.signin.data.SignInRepository
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class SignInViewModel @Inject constructor(private val signInRepository: SignInRepository) :
     ViewModel() {
 
-    var authenticatedUser: LiveData<FirebaseUser>? = null
-
-    private val _signInViewState =
-        MutableLiveData<SignInViewState<FirebaseUser>>()
-    val signInViewState: LiveData<SignInViewState<FirebaseUser>>
-        get() = _signInViewState
+    private val _authenticatedUser =
+        MutableLiveData<FirebaseUser>()
+    val authenticatedUser: LiveData<FirebaseUser>
+        get() = _authenticatedUser
 
     fun signInWithGoogle(googleAuthCredential: AuthCredential?) {
-        authenticatedUser = googleAuthCredential?.let { authCredential ->
-            signInRepository.firebaseSignInWithGoogle(
-                authCredential
-            )
+        viewModelScope.launch {
+            googleAuthCredential?.let {
+                val firebaseUser = signInRepository.firebaseSignInWithGoogle(googleAuthCredential)
+                _authenticatedUser.postValue(firebaseUser)
+            }
         }
     }
 
