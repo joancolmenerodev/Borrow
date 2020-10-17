@@ -10,20 +10,27 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val USER_LOGIN_FAILED = "User Login Failed"
 
 class SignInViewModel @Inject constructor(private val signInRepository: SignInRepository) :
     ViewModel() {
 
     private val _authenticatedUser =
-        MutableLiveData<FirebaseUser>()
-    val authenticatedUser: LiveData<FirebaseUser>
+        MutableLiveData<SignInViewState<FirebaseUser>>()
+    val authenticatedUser: LiveData<SignInViewState<FirebaseUser>>
         get() = _authenticatedUser
+
 
     fun signInWithGoogle(googleAuthCredential: AuthCredential?) {
         viewModelScope.launch {
             googleAuthCredential?.let {
                 val firebaseUser = signInRepository.firebaseSignInWithGoogle(googleAuthCredential)
-                _authenticatedUser.postValue(firebaseUser)
+                if (firebaseUser != null) _authenticatedUser.postValue(
+                    SignInViewState.Success(
+                        firebaseUser
+                    )
+                )
+                else _authenticatedUser.postValue(SignInViewState.Error(Exception(USER_LOGIN_FAILED)))
             }
         }
     }

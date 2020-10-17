@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import com.borrow.home.HomeActivity
+import com.borrow.librarybase.extensions.observe
 import com.borrow.librarybase.viewbinding.viewBinding
 import com.borrow.login.R
 import com.borrow.login.databinding.FragmentSigninBinding
@@ -48,6 +48,22 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSignInButton()
+        observe(signInViewModel.authenticatedUser, { authenticatedUser ->
+            when (authenticatedUser) {
+                is SignInViewState.Success -> {
+                    requireContext().startActivity(
+                        Intent(
+                            requireContext(),
+                            HomeActivity::class.java
+                        )
+                    )
+                    activity?.finish()
+                }
+                else -> {
+                    toastMessage("User not created!")
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -66,11 +82,6 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
 
     private fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential) {
         signInViewModel.signInWithGoogle(googleAuthCredential)
-        signInViewModel.authenticatedUser.observe(this) { authenticatedUser ->
-            toastMessage("User created $authenticatedUser")
-            requireContext().startActivity(Intent(requireContext(), HomeActivity::class.java))
-            activity?.finish()
-        }
     }
 
     private fun toastMessage(message: String) {

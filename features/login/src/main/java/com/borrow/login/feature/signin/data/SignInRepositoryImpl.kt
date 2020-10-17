@@ -5,10 +5,9 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 
 interface SignInRepository {
@@ -21,21 +20,14 @@ class SignInRepositoryImpl @Inject constructor(
     SignInRepository {
 
     override suspend fun firebaseSignInWithGoogle(googleAuthCredential: AuthCredential): FirebaseUser? {
-        return suspendCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
             firebaseAuth.signInWithCredential(googleAuthCredential)
                 .addOnCompleteListener { authTask: Task<AuthResult> ->
                     if (authTask.isSuccessful) {
                         val firebaseUser: FirebaseUser? =
                             firebaseAuth.currentUser
-                        if (firebaseUser != null) {
-                            continuation.resume(firebaseUser)
-                        } else {
-                            continuation.resume(null)
-                        }
+                        continuation.resume(firebaseUser)
                     } else {
-                        authTask.exception?.let {
-                            continuation.resumeWithException(authTask.exception!!)
-                        }
                         continuation.resume(null)
                     }
                 }
