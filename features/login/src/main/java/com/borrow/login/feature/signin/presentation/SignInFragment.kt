@@ -48,7 +48,7 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSignInButton()
-        observe(signInViewModel.authenticatedUser, { authenticatedUser ->
+        observe(signInViewModel.authenticatedUser) { authenticatedUser ->
             when (authenticatedUser) {
                 is SignInViewState.Success -> {
                     requireContext().startActivity(
@@ -63,7 +63,7 @@ class SignInFragment : Fragment(R.layout.fragment_signin) {
                     toastMessage("User not created!")
                 }
             }
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
